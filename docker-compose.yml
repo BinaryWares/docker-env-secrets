@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    # depends_on:
+    #   - server
+    container_name: web_client
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      VITE_BACKEND_PORT: ${VITE_BACKEND_PORT}
+      VITE_FRONTEND_PORT: ${VITE_FRONTEND_PORT}
+      VITE_SERVER_HOST: ${VITE_SERVER_HOST}
+    ports:
+      - "${VITE_FRONTEND_PORT}:${VITE_FRONTEND_PORT}"
+    volumes:
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
